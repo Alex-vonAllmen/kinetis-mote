@@ -1,0 +1,5 @@
+CONTIKI_CPU_DIRS += lib/platforms
+
+include $(CONTIKI_CPU)/lib/common/Makefile.common
+include $(CONTIKI_CPU)/lib/cpu/Makefile.cpu
+include $(CONTIKI_CPU)/lib/drivers/Makefile.drivers

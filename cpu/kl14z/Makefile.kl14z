@@ -1,0 +1,66 @@
+### Compiler definitions
+AS       = arm-none-eabi-as
+AR       = arm-none-eabi-ar
+CC       = arm-none-eabi-gcc
+LD       = arm-none-eabi-gcc
+OBJCOPY  = arm-none-eabi-objcopy
+STRIP    = arm-none-eabi-strip
+
+### The linker script
+LDSCRIPT = $(CONTIKI_CPU)/linker-files/128KB_Pflash.ld
+
+AFLAGS += -mcpu=cortex-m0 -mthumb -mfloat-abi=soft -g3 -gdwarf-2 -gstrict-dwarf -x assembler-with-cpp -Wall -c -fmessage-length=0
+CFLAGS += -mcpu=cortex-m0 -mthumb -mfloat-abi=soft -g3 -gdwarf-2 -gstrict-dwarf
+CFLAGS += -O0 -ffunction-sections -fdata-sections -c -fmessage-length=0
+CFLAGS += -n -D__MAKING_DEPS__  -DFREEDOM -DCW
+CFLAGS += -I"C:/dev/Freescale/CW_MCU_v10.5/MCU/ARM_GCC_Support/ewl/EWL_C/include"
+CFLAGS += -I"C:/dev/Freescale/CW_MCU_v10.5/MCU/ARM_GCC_Support/ewl/EWL_Runtime/include"
+
+LDFLAGS += -mcpu=cortex-m0 -mthumb -mfloat-abi=soft -g3 -gdwarf-2 -gstrict-dwarf
+LDFLAGS += -T $(LDSCRIPT)
+LDFLAGS += -nostartfiles -nodefaultlibs -nostdlib
+LDFLAGS += -Xlinker --gc-sections
+LDFLAGS += -L"C:/dev/Freescale/CW_MCU_v10.5/MCU/ARM_GCC_Support/ewl/lib/armv6-m"
+LDFLAGS += -Xlinker --undefined=__pformatter_
+LDFLAGS += -Xlinker --defsym=__pformatter=__pformatter_
+LDFLAGS += -Xlinker --start-group
+LDFLAGS += -Xlinker -lc -lm -lgcc -luart -lrt
+LDFLAGS += -Xlinker --end-group
+LDFLAGS += -Wl,-Map,$(TARGET).map
+LDFLAGS += -n
+
+### CPU-dependent cleanup files
+CLEAN += symbols.c symbols.h *.d *.elf
+
+### CPU-dependent directories
+CONTIKI_CPU_DIRS += . dev lib linker-files
+
+### CPU start files
+TARGET_STARTFILES=${addprefix $(OBJECTDIR)/,cw_crt0.o}
+
+include $(CONTIKI_CPU)/lib/Makefile.lib
+
+### CPU-dependent source files
+CONTIKI_CPU_SOURCEFILES += kl25z.c clock.c rtimer-arch.c slip_arch.c
+CONTIKI_CPU_SOURCEFILES += watchdog.c uip-ipchksum.c cc2520-arch.c cc2520-arch-sfd.c
+
+CONTIKI_SOURCEFILES +=  $(CONTIKI_CPU_SOURCEFILES)
+
+### Don't treat the .elf as intermediate
+.PRECIOUS: %.elf %.bin
+
+### Compilation rules
+CUSTOM_RULE_LINK=1
+
+%.elf: $(TARGET_STARTFILES) %.co $(PROJECT_OBJECTFILES) $(PROJECT_LIBRARIES) contiki-$(TARGET).a
+	$(TRACE_LD)
+	$(Q)$(LD) $(LDFLAGS) $(TARGET_STARTFILES) ${filter-out %.a,$^} \
+	    ${filter %.a,$^} $(TARGET_LIBFILES) -o $@
+
+%.bin: %.elf
+	$(OBJCOPY) $(OBJCOPY_FLAGS) $< $@
+
+### We don't really need the .bin for the .$(TARGET) but let's make sure it
+### gets built
+%.$(TARGET): %.elf %.bin
+	cp $< $@

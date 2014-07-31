@@ -1,0 +1,5 @@
+CONTIKI_CPU_DIRS += lib/platforms
+
+include $(CONTIKI)/cpu/kl25z/lib/common/Makefile.common
+include $(CONTIKI)/cpu/kl25z/lib/cpu/Makefile.cpu
+include $(CONTIKI)/cpu/kl25z/lib/drivers/Makefile.drivers
