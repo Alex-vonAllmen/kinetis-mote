@@ -1,2 +1,0 @@
-CONTIKI_CPU_DIRS           += lib/common
-CONTIKI_TARGET_SOURCEFILES += alloc.c assert.c io.c memtest.c printf.c queue.c startup.c stdlib.c uif.c

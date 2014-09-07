@@ -1,2 +1,0 @@
-CONTIKI_CPU_DIRS           += lib/drivers
-CONTIKI_TARGET_SOURCEFILES += adc16.c cmp.c i2c.c llwu.c lptmr.c mcg.c pmc.c rcm.c rtc.c smc.c uart.c

@@ -1,2 +1,0 @@
-CONTIKI_CPU_DIRS           += lib/cpu lib/cpu/headers
-CONTIKI_TARGET_SOURCEFILES += arm_cm0.c nmi_isr_handler.c start.c sysinit.c vectors.c
