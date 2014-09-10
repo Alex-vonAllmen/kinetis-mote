@@ -32,7 +32,6 @@
 
 #include "contiki.h"
 #include "dev/watchdog.h"
-#include "common.h"
 
 #define COP_KEY_1       0x55U
 #define COP_KEY_2       0xAAU

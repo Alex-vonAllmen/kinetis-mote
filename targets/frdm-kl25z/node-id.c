@@ -40,6 +40,8 @@
 #include "sys/node-id.h"
 #include "contiki-conf.h"
 
+extern uint8_t mkl25z4_uid[10];
+
 unsigned short node_id = 0;
 
 /*---------------------------------------------------------------------------*/
@@ -48,7 +50,7 @@ node_id_restore(void)
 {
 #if PLATFORM_CONF_HAS_EEPROM
 #else
-  node_id = mkl25z_uid[0];
+  node_id = mkl25z4_uid[0];
 #endif /* PLATFORM_CONF_HAS_EEPROM */
 }
 /*---------------------------------------------------------------------------*/

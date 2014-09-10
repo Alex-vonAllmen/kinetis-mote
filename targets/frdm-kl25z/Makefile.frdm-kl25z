@@ -22,8 +22,13 @@ ifndef SMALL
   SMALL = 1
 endif
 
-CONTIKI_CPU=$(CONTIKI)/../cpu/kl25z
-include $(CONTIKI_CPU)/Makefile.kl25z
+### Define cpu memory size
+ifndef MEM_SIZE
+	MEM_SIZE = 128
+endif
+
+CONTIKI_CPU=$(CONTIKI)/../cpu/kinetis/MKL25Z4
+include $(CONTIKI_CPU)/Makefile.mkl25z4
 
 MODULES += core/net core/net/ip core/net/ipv6 core/net/ipv4 core/net/mac \
            core/net/rime core/net/mac/contikimac core/net/rpl \

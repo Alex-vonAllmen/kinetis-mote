@@ -11,6 +11,8 @@
 #include "dev/spi.h"
 #include "dev/cc2520/cc2520.h"
 
+#include "core_cm0plus.h"
+
 #ifdef CC2520_CONF_SFD_TIMESTAMPS
 #define CONF_SFD_TIMESTAMPS CC2520_CONF_SFD_TIMESTAMPS
 #endif /* CC2520_CONF_SFD_TIMESTAMPS */
@@ -37,12 +39,12 @@ cc2520_arch_init(void)
       & (uint32_t) ~(uint32_t) (PORT_PCR_ISF_MASK | PORT_PCR_IRQC(0x06)
           | PORT_PCR_MUX(0x06)))
       | (uint32_t) (PORT_PCR_IRQC(0x09) | PORT_PCR_MUX(0x01)));
-  /* NVIC_IPR7: PRI_31=0x80 */
-  NVIC_IPR7 = (uint32_t) ((NVIC_IPR7
-      & (uint32_t) ~(uint32_t) (NVIC_IP_PRI_31(0x7F)))
-      | (uint32_t) (NVIC_IP_PRI_31(0x80)));
-  /* NVIC_ISER: SETENA|=0x80000000 */
-  NVIC_ISER |= NVIC_ISER_SETENA(0x80000000);
+
+  /* Set interrupt priority */
+  NVIC_SetPriority(PORTD_IRQn, 1);
+
+  /* Enable Port D interrupt */
+  NVIC_EnableIRQ(PORTD_IRQn);
 
 #if CONF_SFD_TIMESTAMPS
   cc2520_arch_sfd_init();

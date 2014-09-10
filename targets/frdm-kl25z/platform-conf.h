@@ -8,6 +8,8 @@
 #ifndef PLATFORM_CONF_H_
 #define PLATFORM_CONF_H_
 
+#include "MKL25Z4.h"
+
 /*
  * Definitions below are dictated by the hardware and not really
  * changeable!
@@ -19,9 +21,6 @@
 #define PLATFORM_CONF_HAS_USB           1
 #define PLATFORM_CONF_ENABLE_LOW_POWER  0
 #define PLATFORM_CONF_ENABLE_HEARTBEAT  1
-
-#define HAVE_STDINT_H
-#include "kl25zdef.h"
 
 #ifdef __CYGWIN__
 int strcasecmp(const char*, const char*);
@@ -51,8 +50,10 @@ char* strdup(const char*);
 typedef uint32_t clock_time_t;
 typedef uint32_t uip_stats_t;
 
+extern uint32_t SystemCoreClock;
+
 /* CPU target speed in Hz */
-#define F_CPU CLK0_FREQ_HZ
+#define F_CPU SystemCoreClock
 
 /* Our clock resolution, this is the same as Unix HZ. */
 #define CLOCK_CONF_SECOND       256UL
@@ -110,22 +111,22 @@ typedef uint32_t uip_stats_t;
  * Enables/disables CC2520 access to the SPI bus (not the bus).
  * (Chip Select)
  */
-#define CC2520_SPI_ENABLE()     CC_CSN_ClrVal()
-#define CC2520_SPI_DISABLE()    CC_CSN_SetVal()
+#define CC2520_SPI_ENABLE()
+#define CC2520_SPI_DISABLE()
 
 /* Pin status.CC2520 */
-#define CC2520_FIFO_IS_1        CC_FIFO_GetVal()
+#define CC2520_FIFO_IS_1
 #define CC2520_FIFOP_IS_1       (GPIO_PDIR_REG(FPTD_BASE_PTR) & 0x01)
-#define CC2520_CCA_IS_1	        CC_CCA_GetVal()
-#define CC2520_SFD_IS_1	        CC_SFD_GetVal()
+#define CC2520_CCA_IS_1
+#define CC2520_SFD_IS_1
 
 /* The CC2520 reset pin. */
-#define SET_RESET_INACTIVE()    CC_RESET_SetVal()
-#define SET_RESET_ACTIVE()      CC_RESET_ClrVal()
+#define SET_RESET_INACTIVE()
+#define SET_RESET_ACTIVE()
 
 /* CC2520 voltage regulator enable pin. */
-#define SET_VREG_ACTIVE()       CC_VREG_EN_SetVal()
-#define SET_VREG_INACTIVE()     CC_VREG_EN_ClrVal()
+#define SET_VREG_ACTIVE()
+#define SET_VREG_INACTIVE()
 
 /* CC2520 rising edge trigger for external interrupt 0 (FIFOP). */
 #define CC2520_FIFOP_INT_INIT()

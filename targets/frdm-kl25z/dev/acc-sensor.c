@@ -42,13 +42,13 @@ static uint8_t active;
 static void
 activate(void)
 {
-  MMA1_Enable();
+
 }
 /*---------------------------------------------------------------------------*/
 static void
 deactivate(void)
 {
-  MMA1_Disable();
+
 }
 /*---------------------------------------------------------------------------*/
 static int
@@ -57,14 +57,9 @@ value(int type)
   switch (type)
     {
   case ACCEL_X_AXIS:
-    return (MMA1_GetX() >> 8);
-
   case ACCEL_Y_AXIS:
-    return (MMA1_GetY() >> 8);
-
   case ACCEL_Z_AXIS:
-    return (MMA1_GetZ() >> 8);
-
+	  break;
   default:
     return 0;
     }
@@ -77,7 +72,7 @@ configure(int type, int value)
   switch (type)
     {
   case SENSORS_HW_INIT:
-    return MMA1_Init();
+    return 0;
   case SENSORS_ACTIVE:
     if (value)
       {
@@ -89,7 +84,6 @@ configure(int type, int value)
       }
     return 1;
   case ACC_FAST_MODE:
-    MMA1_SetFastMode(value);
     return 1;
     }
   return 0;
@@ -102,8 +96,7 @@ status(int type)
     {
   case SENSORS_ACTIVE:
   case SENSORS_READY:
-    MMA1_isEnabled(&active);
-    return active;
+    return 1;
   default:
     return 0;
     }

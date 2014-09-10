@@ -11,14 +11,14 @@
 #include "sys/etimer.h"
 #include "dev/watchdog.h"
 
-#define CLK_WAIT_US(x)          WAIT1_Waitus(x)
+#define CLK_WAIT_US(x)
 
 /*--------------------------------------------------------------------------*/
 static volatile unsigned long seconds;
 static volatile clock_time_t count = 0;
 /*---------------------------------------------------------------------------*/
 void
-SysTick_IRQHandler(void)
+SysTick_Handler(void)
 {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
 
@@ -45,11 +45,7 @@ SysTick_IRQHandler(void)
 void
 clock_init(void)
 {
-
-  SYST_RVR = 3906 * (F_CPU / 1000000); /* 7,8125ms time base */
-  SYST_CVR = 0; // Reset the Current Value
-  SYST_CSR = SysTick_CSR_ENABLE_MASK | SysTick_CSR_TICKINT_MASK
-      | SysTick_CSR_CLKSOURCE_MASK;
+	SysTick_Config(3906 * (F_CPU / 1000000)); /* 7,8125ms time base */
 }
 /*---------------------------------------------------------------------------*/
 clock_time_t
@@ -65,7 +61,7 @@ clock_seconds(void)
 }
 /*--------------------------------------------------------------------------*/
 void
-clock_delay(unsigned int i)
+clock_delay_usec(uint16_t dt)
 {
-  CLK_WAIT_US(i * 2);
+
 }
