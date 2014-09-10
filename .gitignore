@@ -1,1 +1,7 @@
 obj_*
+*.map
+*.frdm-kl25z
+*.kinetis-mote
+*.bin
+*.elf
+*.hex
