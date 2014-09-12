@@ -77,18 +77,6 @@ extern uint32_t SystemCoreClock;
 #define UART0_CONF_CLOCK_SRC    UART0_PLLFLL_SRC
 #define SLIP_ARCH_CONF_USB      (0 & PLATFORM_CONF_HAS_USB)
 
-/* LED ports */
-#define LEDS_CONF_RED           (1<<18)
-#define LEDS_CONF_GREEN	        (1<<19)
-#define LEDS_CONF_BLUE          (1<<1)
-
-#define RED_LED_OFF             GPIOB_PSOR = LEDS_CONF_RED
-#define RED_LED_ON              GPIOB_PCOR = LEDS_CONF_RED
-#define GREEN_LED_OFF           GPIOB_PSOR = LEDS_CONF_GREEN
-#define GREEN_LED_ON            GPIOB_PCOR = LEDS_CONF_GREEN
-#define BLUE_LED_OFF            GPIOD_PSOR = LEDS_CONF_BLUE
-#define BLUE_LED_ON             GPIOD_PCOR = LEDS_CONF_BLUE
-
 /*
  * SPI bus configuration for the frdm-kl25z
  */
