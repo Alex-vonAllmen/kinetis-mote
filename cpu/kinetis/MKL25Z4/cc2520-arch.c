@@ -32,19 +32,18 @@ cc2520_arch_init(void)
   spi_init();
   
   /* Clear interrupt status flag */
-  PORTD_ISFR = PORT_ISFR_ISF(0x01);
+  PORT_ISFR_REG(CC2520_FIFOP_PORT) = PORT_ISFR_ISF(0x01);
   /* Initialization of Port Control registers */
-  /* PORTD_PCR0: ISF=0,IRQC=9,MUX=1 */
-  PORTD_PCR0 = (uint32_t) ((PORTD_PCR0
+  PORT_PCR_REG(PCR_BASE(CC2520_FIFOP_PORT), CC2520_FIFOP_PIN) = (uint32_t) ((PORTD_PCR0
       & (uint32_t) ~(uint32_t) (PORT_PCR_ISF_MASK | PORT_PCR_IRQC(0x06)
           | PORT_PCR_MUX(0x06)))
       | (uint32_t) (PORT_PCR_IRQC(0x09) | PORT_PCR_MUX(0x01)));
 
   /* Set interrupt priority */
-  NVIC_SetPriority(PORTD_IRQn, 1);
+  NVIC_SetPriority(PORT_IRQ_VEC(CC2520_FIFOP_PORT), 1);
 
   /* Enable Port D interrupt */
-  NVIC_EnableIRQ(PORTD_IRQn);
+  NVIC_EnableIRQ(PORT_IRQ_VEC(CC2520_FIFOP_PORT));
 
 #if CONF_SFD_TIMESTAMPS
   cc2520_arch_sfd_init();
@@ -54,11 +53,11 @@ cc2520_arch_init(void)
 }
 /*---------------------------------------------------------------------------*/
 void
-PORTD_IRQHandler(void)
+PORT_ISR(CC2520_FIFOP_PORT)(void)
 {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
   
-  PORTD_PCR0 |= PORT_PCR_ISF_MASK;
+  PORT_PCR_REG(PCR_BASE(CC2520_FIFOP_PORT), CC2520_FIFOP_PIN) |= PORT_PCR_ISF_MASK;
   cc2520_interrupt();
   
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
